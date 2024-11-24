@@ -96,6 +96,22 @@ void flash_read()
 	}
 }
 
+void change_color(int c)
+{
+	wsc1228_set_color(c);
+	HAL_StatusTypeDef status = wsc1228_start_data_sending(&htim3);
+	//*
+	if(status==HAL_OK)
+	{
+		LOG("wsc1228 Start data sending OK. Color=%d\r\n",c);
+	}
+	else
+	{
+		LOG("wsc1228 Start data sending ERROR - %d\r\n",status);
+	}
+	//*/
+}
+
 
 /* USER CODE END 0 */
 
@@ -135,10 +151,12 @@ int main(void)
 
 
 
+  nec_init(&htim2);
+  HAL_Delay(500);
   wsc1228_init_module(&htim3);
   wsc1228_set_color(0);
   wsc1228_start_data_sending(&htim3);
-  nec_init(&htim2);
+
 
   /* USER CODE END 2 */
 
@@ -283,7 +301,7 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_OC_Init(&htim3) != HAL_OK)
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -293,11 +311,11 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }

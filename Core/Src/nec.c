@@ -23,8 +23,6 @@ uint16_t ct_values[32];
 
 uint8_t  SYM=0;
 
-
-
 struct IR_CODE
 {
 	uint32_t code;
@@ -93,6 +91,7 @@ void process_data()
 	{
 		SYM=getsym(data);
 		LOG("data=0x%04x   sym=%d\r\n",data,SYM);
+		change_color(SYM);
 	}
 		//LOG("addr=%d 0x%02x, command=%d %02x\r\n",command[0],command[0],command[2],command[2]);
 	//LOG("addr_inv=0x%02x, command_inv=%02x\r\n",command[1],command[1],command[3],command[3]);

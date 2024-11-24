@@ -11,13 +11,17 @@
 #include "main.h"
 
 #define LED_COUNT 1000
-#define LED_CODE_SIZE 4
-#define LED_BUF_SIZE (LED_CODE_SIZE*8)
+#define LED_CODE_SIZE 3
+#define LED_BUF_SIZE (LED_CODE_SIZE*8+50)
 
 
 void wsc1228_init_module(TIM_HandleTypeDef* htim);
 HAL_StatusTypeDef wsc1228_start_data_sending();
 HAL_StatusTypeDef wsc1228_stop_data_sending();
 void wsc1228_set_color(int c);
+
+void transferCmplt();
+void transferHalfCmplt();
+void transferError();
 
 #endif /* INC_WSC1228B_H_ */

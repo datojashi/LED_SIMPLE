@@ -22,6 +22,7 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "wsc1228b.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -220,6 +221,20 @@ void EXTI0_IRQHandler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
+	/*
+	if(__HAL_DMA_GET_FLAG(DMA1,DMA_FLAG_TC6))
+	{
+		transferCmplt();
+	}
+	else if(__HAL_DMA_GET_FLAG(DMA1,DMA_FLAG_HT6))
+	{
+		transferHalfCmplt();
+	}
+	else if(__HAL_DMA_GET_FLAG(DMA1,DMA_FLAG_TE6))
+	{
+		transferError();
+	}
+	//*/
 
   /* USER CODE END DMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
