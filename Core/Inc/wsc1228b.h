@@ -10,9 +10,9 @@
 
 #include "main.h"
 
-#define LED_COUNT 1000
+#define LED_COUNT 1
 #define LED_CODE_SIZE 3
-#define LED_BUF_SIZE (LED_CODE_SIZE*8+50)
+#define LED_BUF_SIZE (LED_CODE_SIZE*8)
 
 
 void wsc1228_init_module(TIM_HandleTypeDef* htim);

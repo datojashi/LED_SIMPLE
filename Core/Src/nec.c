@@ -21,7 +21,8 @@ static uint32_t data=0;
 uint16_t width_vals[32];
 uint16_t ct_values[32];
 
-uint8_t  SYM=0;
+volatile uint8_t  SYM=0;
+volatile uint8_t  SYM_EVENT=0;
 
 struct IR_CODE
 {
@@ -91,7 +92,8 @@ void process_data()
 	{
 		SYM=getsym(data);
 		LOG("data=0x%04x   sym=%d\r\n",data,SYM);
-		change_color(SYM);
+		//change_color(SYM);
+		SYM_EVENT=1;
 	}
 		//LOG("addr=%d 0x%02x, command=%d %02x\r\n",command[0],command[0],command[2],command[2]);
 	//LOG("addr_inv=0x%02x, command_inv=%02x\r\n",command[1],command[1],command[3],command[3]);
@@ -111,11 +113,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim->Instance==TIM2)
 	{
 		//HAL_TIM_Base_Stop(htim);
-		HAL_GPIO_TogglePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin);
+		//HAL_GPIO_WritePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin,1);
 		if(receiving_signal)
 		{
 			process_data();
 		}
+		//HAL_Delay(20);
+		//HAL_GPIO_WritePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin,0);
 		//LOG("=== TIMER_INTERRUPT  HAL_TIM_PeriodElapsedCallback===\r\n");
 	}
 }

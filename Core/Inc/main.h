@@ -64,6 +64,12 @@ void change_color(int c);
 #define NEC_INT_Pin GPIO_PIN_0
 #define NEC_INT_GPIO_Port GPIOA
 #define NEC_INT_EXTI_IRQn EXTI0_IRQn
+#define TEST1_Pin GPIO_PIN_3
+#define TEST1_GPIO_Port GPIOA
+#define TEST2_Pin GPIO_PIN_4
+#define TEST2_GPIO_Port GPIOA
+#define TEST3_Pin GPIO_PIN_5
+#define TEST3_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

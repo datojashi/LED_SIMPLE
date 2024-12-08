@@ -221,9 +221,10 @@ void EXTI0_IRQHandler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
-	/*
+	//*
 	if(__HAL_DMA_GET_FLAG(DMA1,DMA_FLAG_TC6))
 	{
+		//LOG("=============================\r\n");
 		transferCmplt();
 	}
 	else if(__HAL_DMA_GET_FLAG(DMA1,DMA_FLAG_HT6))
@@ -263,7 +264,6 @@ void TIM2_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */

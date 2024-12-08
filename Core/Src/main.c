@@ -56,6 +56,9 @@ UART_HandleTypeDef huart1;
 
 uint32_t flash_data[4];
 
+extern volatile uint8_t  SYM;
+extern volatile uint8_t  SYM_EVENT;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,15 +102,15 @@ void flash_read()
 void change_color(int c)
 {
 	wsc1228_set_color(c);
-	HAL_StatusTypeDef status = wsc1228_start_data_sending(&htim3);
+	HAL_StatusTypeDef status = wsc1228_start_data_sending();
 	//*
 	if(status==HAL_OK)
 	{
-		LOG("wsc1228 Start data sending OK. Color=%d\r\n",c);
+		LOG("Start data sending OK. Color=%d\r\n",c);
 	}
 	else
 	{
-		LOG("wsc1228 Start data sending ERROR - %d\r\n",status);
+		LOG("Start data sending ERROR - %d\r\n",status);
 	}
 	//*/
 }
@@ -154,28 +157,43 @@ int main(void)
   nec_init(&htim2);
   HAL_Delay(500);
   wsc1228_init_module(&htim3);
-  wsc1228_set_color(0);
-  wsc1228_start_data_sending(&htim3);
+
+  for(int i=0; i<10; i++)
+  {
+	  change_color(i);
+	  HAL_Delay(2000);
+  }
+  //change_color(0);
+
+
+  //wsc1228_set_color(0);
+  //wsc1228_start_data_sending();
 
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int loop_ct1 =0;
-  int loop_ct2 =0;
+  LOG("Starting main loop \r\n");
+
+  int ct=0;
   while (1)
   {
-	  //HAL_GPIO_TogglePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin);
-	  if(loop_ct1>=10)
+	  if(SYM_EVENT==1)
 	  {
-		  //LOG("loop_ct=%d\r\n",loop_ct2);
-		  loop_ct2++;
-		  loop_ct1=0;
-		  //LOG("loop_ct2=%d\r\n",loop_ct2);
+		  SYM_EVENT=0;
+		  change_color(SYM);
 	  }
-	  HAL_Delay(300);
-	  loop_ct1++;
+	  HAL_Delay(1);
+	  ct++;
+	  if(ct>=300)
+	  {
+		  ct=0;
+		  HAL_GPIO_TogglePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin);
+		  HAL_GPIO_TogglePin(TEST2_GPIO_Port, TEST2_Pin);
+	  }
+	  HAL_GPIO_TogglePin(TEST1_GPIO_Port, TEST1_Pin);
+
 
     /* USER CODE END WHILE */
 
@@ -394,6 +412,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DEGUG_LED_GPIO_Port, DEGUG_LED_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, TEST1_Pin|TEST2_Pin|TEST3_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : DEGUG_LED_Pin */
   GPIO_InitStruct.Pin = DEGUG_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -406,6 +427,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(NEC_INT_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : TEST1_Pin TEST2_Pin TEST3_Pin */
+  GPIO_InitStruct.Pin = TEST1_Pin|TEST2_Pin|TEST3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
